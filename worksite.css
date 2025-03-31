@@ -1,0 +1,8 @@
+.kdr-link-w3 {
+    font-weight: 600;
+    color: var(--kdr-white-color)
+  }
+
+.kdr-link-w1,.kdr-link-w2, .kdr-link-w3, .kdr-link-w4, .kdr-link-w5 {
+    color: #dde3f5
+  }

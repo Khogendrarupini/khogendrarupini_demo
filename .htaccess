@@ -1,0 +1,157 @@
+# Enable URL Rewriting
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect to HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Redirect WWW to non-WWW
+    RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+    # Rewrite rules to remove .html extension
+    RewriteCond %{HTTP_HOST} ^(khogendrarupini\.com)$ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}\.html -f
+    RewriteRule ^(.*)$ $1.html [L]
+
+    # Ensure /blog works properly
+    RewriteCond %{HTTP_HOST} ^(khogendrarupini\.com)$ [NC]
+    RewriteCond %{REQUEST_URI} ^/blog/?$ [NC]
+    RewriteCond %{DOCUMENT_ROOT}/blog/index.html -f
+    RewriteRule ^blog/?$ /blog/index.html [L]
+
+    # Rewrite rule for cleaner URL
+    RewriteRule ^download$ docs/Downloads/download.html [L]
+
+    # Simple test rule
+    RewriteRule ^test$ docs/Downloads/download.html [L]
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "no-referrer-when-downgrade"
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Gzip Compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json
+</IfModule>
+
+# Caching
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType text/x-javascript "access plus 1 month"
+    ExpiresByType application/x-shockwave-flash "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>
+
+# Custom Error Pages
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+
+# JS :: LevoricLearn #
+<IfModule mod_headers.c>
+    <Files "ll-updates.js">
+        SetEnvIf Origin "^https?://(www\.)?(khogendrarupini\.com)$" AccessControlAllowOrigin=$0
+        Header set Access-Control-Allow-Origin "%{AccessControlAllowOrigin}e" env=AccessControlAllowOrigin
+        Header set Access-Control-Allow-Methods "GET, HEAD"
+        Header set Access-Control-Allow-Credentials true
+        Header set Access-Control-Allow-Headers "Content-Type"
+        Header always unset Access-Control-Allow-Origin "unset"
+    </Files>
+    Header always append X-Frame-Options DENY
+    Header set X-Content-Type-Options nosniff
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+<FilesMatch "\.(php)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# CSS :: LevoricLearn #
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept"
+</IfModule>
+
+<Files .htaccess>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<FilesMatch "(^\.|wp-config\.php|xmlrpc\.php|error_log|php\.ini)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+Options -Indexes
+
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
+
+# Redirect /Contact to /contact (case insensitive)
+RewriteCond %{HTTP_HOST} ^(www\.)?khogendrarupini\.com$ [NC]
+RewriteCond %{REQUEST_URI} ^/Contact/?$ [NC]
+RewriteRule ^ /contact [R=301,L]
+
+# Redirect /blog to /blogsite (case insensitive)
+RewriteCond %{HTTP_HOST} ^(www\.)?khogendrarupini\.com$ [NC]
+RewriteCond %{REQUEST_URI} ^/blog/?$ [NC]
+RewriteRule ^ /blogsite [R=301,L]
+
+# Redirect /Blogsite to /blogsite (case insensitive)
+RewriteCond %{HTTP_HOST} ^(www\.)?khogendrarupini\.com$ [NC]
+RewriteCond %{REQUEST_URI} ^/Blogsite/?$ [NC]
+RewriteRule ^ /blogsite [R=301,L]

@@ -1,0 +1,30 @@
+# robots.txt for khogendrarupini.com
+# Created on 2025-01-04
+# Purpose: Define crawling rules for search engines
+
+# Allow all user-agents full access to the site
+User-agent: *
+Disallow:
+
+# Exclude sensitive or non-public directories (if they exist)
+Disallow: /admin/
+Disallow: /private/
+Disallow: /internal/
+Disallow: /temp/
+Disallow: /backup/
+
+# Block specific file types from being crawled (if necessary)
+Disallow: /*.sql$
+Disallow: /*.json$
+Disallow: /*.zip$
+Disallow: /*.log$
+
+# Exclude query strings to avoid duplicate content
+Disallow: /*?*
+
+# Crawl-delay for specific bots (optional, for reducing server load)
+User-agent: Bingbot
+Crawl-delay: 10
+
+# Sitemap for better indexing
+Sitemap: https://khogendrarupini.com/sitemap.xml

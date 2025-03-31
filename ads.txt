@@ -1,0 +1,4 @@
+# Ads.txt file for khogendrarupini.com
+# This file lists authorized sellers of ad inventory for this domain.
+
+google.com, pub-5533796109949163, DIRECT, f08c47fec0942fa0
